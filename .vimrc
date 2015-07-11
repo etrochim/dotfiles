@@ -100,6 +100,8 @@ if has('gui_running')
 
   if has('win32') || has('win64')
     set guifont=Inconsolata_for_Powerline:h9:cANSI,Consolas
+  elseif has('mac')
+    set guifont=Inconsolata\ for\ Powerline:h11
   else
     set guifont=Inconsolata\ Medium\ 9,Consolas
   endif
@@ -107,8 +109,6 @@ if has('gui_running')
 endif
 
 if $TERM =~ "256color" || has('gui_running')
-  "colorscheme xoria256
-  "colorscheme molokai
   colorscheme Tomorrow-Night
 else
   color elflord
