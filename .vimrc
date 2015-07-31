@@ -46,7 +46,7 @@ if v:version >= 700
   Plugin 'tpope/vim-surround'
   Plugin 'mileszs/ack.vim'
   Plugin 'bogado/file-line'
-  "Plugin 'scrooloose/nerdtree'
+  Plugin 'scrooloose/nerdtree'
   Plugin 'danro/rename.vim'
   Plugin 'closetag.vim'
   Plugin 'scrooloose/syntastic'
@@ -195,6 +195,8 @@ set scrolloff=5
 
 set wildignore+=*/tmp/*,*.so,*.swp,*.pyc,*.o,*.a,*.png,*.jpg,*.gif
 
+set wildignorecase
+
 "autocmd BufEnter *.cc,*.hh,*.c,*.cpp,*.h nested TagbarOpen
 
 if has('win32') || has('win64')
@@ -242,6 +244,8 @@ set tags=./tags;
 map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
 " A-] Open the definition in a vertical split
 map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+
+let python_highlight_all = 1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""
 "              Function Key Mappings                  "
