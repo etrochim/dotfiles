@@ -30,8 +30,12 @@ if v:version >= 700
 
   if v:version >= 703 && has("lua")
     Plugin 'Shougo/neocomplete.vim'
+    let g:neocomplete#enable_at_startup = 1
+    autocmd FileType python NeoCompleteLock
+    autocmd FileType javascript NeoCompleteLock
   elseif v:version >= 702
     Plugin 'Shougo/neocomplcache'
+    let g:neocomplcache_enable_at_startup = 1
   endif
 
   if v:version >= 703 && has('python')
@@ -47,14 +51,24 @@ if v:version >= 700
   Plugin 'mileszs/ack.vim'
   Plugin 'bogado/file-line'
   Plugin 'scrooloose/nerdtree'
+  Plugin 'Xuyuanp/nerdtree-git-plugin'
   Plugin 'danro/rename.vim'
   Plugin 'closetag.vim'
   Plugin 'scrooloose/syntastic'
   Plugin 'tpope/vim-fugitive'
   Plugin 'tpope/vim-repeat'
   Plugin 'godlygeek/tabular'
+  Plugin 'sukima/xmledit'
+
+  Plugin 'Chiel92/vim-autoformat'
+
+  Plugin 'davidhalter/jedi-vim'
+  Plugin 'ap/vim-css-color'
 
   Plugin 'OmniCppComplete'
+
+  Plugin 'othree/javascript-libraries-syntax.vim'
+  Plugin 'marijnh/tern_for_vim'
 
   Plugin 'scrooloose/nerdcommenter'
   Plugin 'ntpeters/vim-better-whitespace'
@@ -64,18 +78,21 @@ if v:version >= 700
   Plugin 'tmhedberg/matchit'
   "Plugin 'Townk/vim-autoclose'
   "Plugin 'sickill/vim-pasta'
-  Plugin 'kien/ctrlp.vim'
+  Plugin 'ctrlpvim/ctrlp.vim'
   Plugin 'flazz/vim-colorschemes'
+  Plugin 'joshdick/onedark.vim'
 
   Plugin 'vasconcelloslf/vim-interestingwords'
 
   " Syntax Highlighting Plugins
-  Plugin 'pangloss/vim-javascript'
+  "Plugin 'pangloss/vim-javascript'
+  Plugin 'othree/yajs.vim'
   Plugin 'groenewege/vim-less'
   Plugin 'octol/vim-cpp-enhanced-highlight'
   Plugin 'Glench/Vim-Jinja2-Syntax'
   Plugin 'puppetlabs/puppet-syntax-vim'
   Plugin 'derekwyatt/vim-scala'
+  Plugin 'briancollins/vim-jst'
   Plugin 'Flex-4'
 
   " Perl related plugins
@@ -109,7 +126,7 @@ if has('gui_running')
 endif
 
 if $TERM =~ "256color" || has('gui_running')
-  colorscheme Tomorrow-Night
+  colorscheme onedark
 else
   color elflord
 endif
@@ -122,6 +139,8 @@ if has('persistent_undo')
   set undodir=~/.vim/undodir
   set undofile
 endif
+
+set noswapfile
 
 " Backups
 "set backupdir=~/.vim/tmp/backup// " backups
@@ -136,6 +155,9 @@ if has("gui_macvim")
    set fuoptions=maxvert,maxhorz
 endif
 
+" ignore whitespace in vimdiff
+set diffopt+=iwhite
+
 set autochdir
 
 set backspace=2
@@ -148,9 +170,11 @@ set ruler
 
 set hidden
 
+set splitbelow
+
 set visualbell
 
-" automatically show matching brackets. works like it does in bbedit.
+" automatically show matching brackets.
 set showmatch
 
 " show line numbers
@@ -167,11 +191,17 @@ set lazyredraw
 
 " Insert spaces for tabs according to shiftwidth.
 set smarttab
+
 " Use indent from current line when starting a new one.
 "set autoindent
-filetype plugin indent on
+
 " Use smart indenting when starting a new line.
 "set smartindent
+
+set nowrap
+set guioptions+=b
+
+set diffopt+=vertical
 
 " Expand tabs to spaces.
 set expandtab
@@ -226,6 +256,15 @@ noremap <C-j> <C-w>j
 noremap <C-k> <C-w>k
 noremap <C-l> <C-w>l
 
+" Bring up omnicompletion using Ctrl-space
+inoremap <C-Space> <C-x><C-o>
+inoremap <C-@> <C-Space>
+
+" Use Ctrl-s to save
+noremap <silent> <C-S>          :update<CR>
+vnoremap <silent> <C-S>         <C-C>:update<CR>
+inoremap <silent> <C-S>         <C-O>:update<CR>
+
 " have <esc> remove search highlighting
 " nnoremap <silent> <esc> :noh<return><esc>
 
@@ -245,6 +284,11 @@ map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
 " A-] Open the definition in a vertical split
 map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
+" Sort python imports with isort
+if executable('isort')
+  command! -range=% Isort :<line1>,<line2>! isort -
+endif
+
 let python_highlight_all = 1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -257,6 +301,10 @@ map <F4> :set list!<CR>
 map <F5> :NERDTreeToggle<CR>
 " Open tagbar subwindow with F6 key
 map <F6> :TagbarToggle<cr>
+
+"Switch buffers with Ctrl-LeftArrow and Ctrl-RightArrow
+noremap <C-Left> <Esc>:bp<CR>
+noremap <C-Right> <Esc>:bn<CR>
 
 " Switch tabs with Ctrl-LeftArrow and Ctrl-RightArrow
 "noremap <C-Left> <Esc>:tabprev<CR>
@@ -296,12 +344,6 @@ set guitablabel=%{GuiTabLabel()}
 "                 Plugin Configuration                "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Enable Neocomplcache
-"let g:neocomplcache_enable_at_startup = 1
-
-" Enable Neocomplete
-let g:neocomplete#enable_at_startup = 1
-
 " MiniBufExpl
 let g:miniBufExplUseSingleClick = 1
 
@@ -336,6 +378,10 @@ set ttimeoutlen=50
 
 " Syntastic
 let g:syntastic_javascript_checkers = ["jshint"]
+let g:syntastic_python_python_eec = '/usr/bin/python3.4'
+let g:syntastic_check_on_open = 1
+" Ignore angularjs attributes in html
+let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-"]
 
 function! s:NerdTreeGo(package)
   let path = system("goFind " . a:package)
