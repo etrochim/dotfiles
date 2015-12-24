@@ -8,106 +8,94 @@ if !has('win32') && !has('win64')
   set shell=/bin/bash
 endif
 
-" Bootstrap vundle
-"if !isdirectory(expand("~/.vim/bundle/vundle"))
-    "call mkdir(expand("~/.vim/bundle"), "p")
-    "!git clone https://github.com/gmarik/vundle.git ~/.vim/bundle
-    "let s:bootstrap=1
-"endif
+function! BuildTern(info)
+  if a:info.status == 'installed' || a:info.force
+    !npm update
+  endif
+endfunction
 
 if v:version >= 700
-  " configure vundle
-  set rtp+=~/.vim/bundle/vundle/
-  call vundle#begin()
+  " configure vim-plug
+  call plug#begin('~/.vim/plugged')
 
   if v:version >= 701
-    Plugin 'majutsushi/tagbar'
+    Plug 'majutsushi/tagbar'
   endif
 
   if v:version >= 702
-    Plugin 'bling/vim-airline'
+    Plug 'bling/vim-airline'
   endif
 
   if v:version >= 703 && has("lua")
-    Plugin 'Shougo/neocomplete.vim'
+    Plug 'Shougo/neocomplete.vim'
     let g:neocomplete#enable_at_startup = 1
     autocmd FileType python NeoCompleteLock
     autocmd FileType javascript NeoCompleteLock
   elseif v:version >= 702
-    Plugin 'Shougo/neocomplcache'
+    Plug 'Shougo/neocomplcache'
     let g:neocomplcache_enable_at_startup = 1
   endif
 
   if v:version >= 703 && has('python')
-    Plugin 'Gundo'
+    Plug 'Gundo'
   endif
 
-  " let Vundle manage Vundle
-  " required!
-  Plugin 'gmarik/vundle'
-  "Plugin 'fholgado/minibufexpl.vim'
+  Plug 'tpope/vim-surround'
+  Plug 'mileszs/ack.vim'
+  Plug 'bogado/file-line'
+  Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+  Plug 'Xuyuanp/nerdtree-git-plugin'
+  Plug 'danro/rename.vim'
+  Plug 'closetag.vim'
+  Plug 'scrooloose/syntastic'
+  Plug 'tpope/vim-fugitive'
+  Plug 'tpope/vim-repeat'
+  Plug 'godlygeek/tabular'
+  Plug 'sukima/xmledit'
 
-  Plugin 'tpope/vim-surround'
-  Plugin 'mileszs/ack.vim'
-  Plugin 'bogado/file-line'
-  Plugin 'scrooloose/nerdtree'
-  Plugin 'Xuyuanp/nerdtree-git-plugin'
-  Plugin 'danro/rename.vim'
-  Plugin 'closetag.vim'
-  Plugin 'scrooloose/syntastic'
-  Plugin 'tpope/vim-fugitive'
-  Plugin 'tpope/vim-repeat'
-  Plugin 'godlygeek/tabular'
-  Plugin 'sukima/xmledit'
+  Plug 'Chiel92/vim-autoformat'
 
-  Plugin 'Chiel92/vim-autoformat'
+  Plug 'davidhalter/jedi-vim', { 'for': 'python' }
+  Plug 'ap/vim-css-color'
 
-  Plugin 'davidhalter/jedi-vim'
-  Plugin 'ap/vim-css-color'
+  Plug 'OmniCppComplete'
 
-  Plugin 'OmniCppComplete'
+  Plug 'othree/javascript-libraries-syntax.vim', { 'for': 'javascript' }
+  Plug 'marijnh/tern_for_vim', { 'for': 'javascript', 'do': function('BuildTern') }
 
-  Plugin 'othree/javascript-libraries-syntax.vim'
-  Plugin 'marijnh/tern_for_vim'
+  Plug 'scrooloose/nerdcommenter'
+  Plug 'ntpeters/vim-better-whitespace'
 
-  Plugin 'scrooloose/nerdcommenter'
-  Plugin 'ntpeters/vim-better-whitespace'
+  Plug 'airblade/vim-gitgutter'
 
-  Plugin 'airblade/vim-gitgutter'
+  Plug 'tmhedberg/matchit'
+  "Plug 'Townk/vim-autoclose'
+  "Plug 'sickill/vim-pasta'
+  Plug 'ctrlpvim/ctrlp.vim'
+  Plug 'flazz/vim-colorschemes'
+  Plug 'joshdick/onedark.vim'
 
-  Plugin 'tmhedberg/matchit'
-  "Plugin 'Townk/vim-autoclose'
-  "Plugin 'sickill/vim-pasta'
-  Plugin 'ctrlpvim/ctrlp.vim'
-  Plugin 'flazz/vim-colorschemes'
-  Plugin 'joshdick/onedark.vim'
+  Plug 'vasconcelloslf/vim-interestingwords'
 
-  Plugin 'vasconcelloslf/vim-interestingwords'
-
-  " Syntax Highlighting Plugins
-  "Plugin 'pangloss/vim-javascript'
-  Plugin 'othree/yajs.vim'
-  Plugin 'groenewege/vim-less'
-  Plugin 'octol/vim-cpp-enhanced-highlight'
-  Plugin 'Glench/Vim-Jinja2-Syntax'
-  Plugin 'puppetlabs/puppet-syntax-vim'
-  Plugin 'derekwyatt/vim-scala'
-  Plugin 'briancollins/vim-jst'
-  Plugin 'Flex-4'
+  " Syntax Highlighting Plugs
+  "Plug 'pangloss/vim-javascript'
+  Plug 'othree/yajs.vim'
+  Plug 'groenewege/vim-less'
+  Plug 'octol/vim-cpp-enhanced-highlight'
+  Plug 'Glench/Vim-Jinja2-Syntax'
+  Plug 'puppetlabs/puppet-syntax-vim'
+  Plug 'derekwyatt/vim-scala'
+  Plug 'briancollins/vim-jst'
+  Plug 'Flex-4'
 
   " Perl related plugins
-  "Plugin 'vim-perl/vim-perl'
-  "Plugin 'perl-support.vim'
-  "Plugin 'perlhelp.vim'
+  "Plug 'vim-perl/vim-perl'
+  "Plug 'perl-support.vim'
+  "Plug 'perlhelp.vim'
 
-  "Plugin 'SirVer/ultisnips'
+  "Plug 'SirVer/ultisnips'
 
-  call vundle#end()
-endif
-
-if exists("s:bootstrap") && s:bootstrap
-    unlet s:bootstrap
-    PluginInstall
+  call plug#end()
 endif
 
 if has('gui_running')
@@ -387,7 +375,9 @@ function! s:NerdTreeGo(package)
   let path = system("goFind " . a:package)
   execute "NERDTree " . path
 endfunction
-command! -nargs=1 Go call s:NerdTreeGo(<f-args>)
+if executable('goFind')
+  command! -nargs=1 Go call s:NerdTreeGo(<f-args>)
+endif
 
 function! s:SwitchToHeaderOrSource()
   let file = expand("%:t:r")
