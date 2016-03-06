@@ -36,9 +36,7 @@ if v:version >= 700
     let g:neocomplcache_enable_at_startup = 1
   endif
 
-  if v:version >= 703 && has('python')
-    Plug 'Gundo'
-  endif
+  Plug 'mbbill/undotree'
 
   Plug 'tpope/vim-surround'
   Plug 'mileszs/ack.vim'
@@ -60,7 +58,7 @@ if v:version >= 700
 
   Plug 'OmniCppComplete'
 
-  Plug 'othree/javascript-libraries-syntax.vim', { 'for': 'javascript' }
+  Plug 'othree/javascript-libraries-syntax.vim'
   Plug 'marijnh/tern_for_vim', { 'for': 'javascript', 'do': function('BuildTern') }
 
   Plug 'scrooloose/nerdcommenter'
@@ -72,17 +70,21 @@ if v:version >= 700
   "Plug 'Townk/vim-autoclose'
   "Plug 'sickill/vim-pasta'
   Plug 'ctrlpvim/ctrlp.vim'
-  Plug 'flazz/vim-colorschemes'
-  Plug 'joshdick/onedark.vim'
 
   Plug 'vasconcelloslf/vim-interestingwords'
+
+  " Colorschemes
+  Plug 'flazz/vim-colorschemes'
+  Plug 'AlessandroYorba/Sierra'
+  Plug 'joshdick/onedark.vim'
+  Plug 'mhinz/vim-janah'
 
   " Syntax Highlighting Plugs
   "Plug 'pangloss/vim-javascript'
   Plug 'othree/yajs.vim'
   Plug 'groenewege/vim-less'
   Plug 'octol/vim-cpp-enhanced-highlight'
-  Plug 'Glench/Vim-Jinja2-Syntax'
+  "Plug 'Glench/Vim-Jinja2-Syntax'
   Plug 'puppetlabs/puppet-syntax-vim'
   Plug 'derekwyatt/vim-scala'
   Plug 'briancollins/vim-jst'
@@ -99,7 +101,7 @@ if v:version >= 700
 endif
 
 if has('gui_running')
-  set lines=80
+  set lines=70
   set columns=150
   set go-=T
 
@@ -332,9 +334,6 @@ set guitablabel=%{GuiTabLabel()}
 "                 Plugin Configuration                "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" MiniBufExpl
-let g:miniBufExplUseSingleClick = 1
-
 " NERDTree
 let NERDTreeMouseMode=2
 let NERDTreeQuitOnOpen=1
@@ -365,11 +364,21 @@ endif
 set ttimeoutlen=50
 
 " Syntastic
-let g:syntastic_javascript_checkers = ["jshint"]
-let g:syntastic_python_python_eec = '/usr/bin/python3.4'
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+let g:syntastic_javascript_checkers = ["jshint"]
+let g:syntastic_python_checkers = ["pyflakes", "python"]
+let g:syntastic_python_python_exec = '/usr/bin/python3.4'
+let g:syntastic_python_flake8_args='--ignore=E501'
+let g:syntastic_check_on_open = 1
+let g:syntastic_html_tidy_exec = '/usr/bin/tidy'
 " Ignore angularjs attributes in html
-let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-"]
+let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-", "trimming empty"]
+let g:syntastic_c_checkers=["gcc"]
 
 function! s:NerdTreeGo(package)
   let path = system("goFind " . a:package)
