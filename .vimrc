@@ -26,69 +26,106 @@ if v:version >= 700
     Plug 'bling/vim-airline'
   endif
 
-  if v:version >= 703 && has("lua")
-    Plug 'Shougo/neocomplete.vim'
-    let g:neocomplete#enable_at_startup = 1
-    autocmd FileType python NeoCompleteLock
-    autocmd FileType javascript NeoCompleteLock
-  elseif v:version >= 702
-    Plug 'Shougo/neocomplcache'
-    let g:neocomplcache_enable_at_startup = 1
-  endif
+  "if v:version >= 703 && has("lua")
+    "Plug 'Shougo/neocomplete.vim'
+    "let g:neocomplete#enable_at_startup = 1
+    "autocmd FileType python NeoCompleteLock
+    "autocmd FileType javascript NeoCompleteLock
+  "elseif v:version >= 702
+    "Plug 'Shougo/neocomplcache'
+    "let g:neocomplcache_enable_at_startup = 1
+  "endif
 
-  Plug 'mbbill/undotree'
+  "Plug 'mbbill/undotree'
+
+  Plug 'Valloric/YouCompleteMe'
+  nnoremap <leader>gl :YcmCompleter GoToDefinition<CR>
+  let g:ycm_server_python_interpreter = '/bin/python3'
+  let g:ycm_confirm_extra_conf = 0
+  let g:ycm_autoclose_preview_window_after_completion = 1
 
   Plug 'tpope/vim-surround'
   Plug 'mileszs/ack.vim'
-  Plug 'bogado/file-line'
-  Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-  Plug 'Xuyuanp/nerdtree-git-plugin'
+  "Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+  "Plug 'Xuyuanp/nerdtree-git-plugin'
   Plug 'danro/rename.vim'
-  Plug 'closetag.vim'
-  Plug 'scrooloose/syntastic'
+  "Plug 'closetag.vim'
+
+  Plug 'w0rp/ale'
+  let g:ale_sign_column_always = 1
+
+  "Plug 'scrooloose/syntastic'
+  "set statusline+=%#warningmsg#
+  "set statusline+=%{SyntasticStatuslineFlag()}
+  "set statusline+=%*
+  "let g:syntastic_always_populate_loc_list = 1
+  "let g:syntastic_check_on_open = 1
+  "let g:syntastic_check_on_wq = 0
+  "let g:syntastic_javascript_checkers = ["eslint"]
+  "let g:syntastic_javascript_eslint_exec = 'eslint_d'
+  "let g:syntastic_python_checkers = ["flake8", "python"]
+  "let g:syntastic_python_python_exec = '/usr/bin/python3.4'
+  "let g:syntastic_python_flake8_args='--ignore=E501'
+  "let g:syntastic_check_on_open = 1
+  "let g:syntastic_html_tidy_exec = '/usr/bin/tidy'
+  "" Ignore angularjs attributes in html
+  "let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-", "trimming empty"]
+  "let g:syntastic_c_checkers=["gcc"]
+
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-repeat'
   Plug 'godlygeek/tabular'
-  Plug 'sukima/xmledit'
+  "Plug 'sukima/xmledit'
 
-  Plug 'Chiel92/vim-autoformat'
+  "Plug 'Chiel92/vim-autoformat'
 
-  Plug 'davidhalter/jedi-vim', { 'for': 'python' }
+  "Plug 'davidhalter/jedi-vim', { 'for': 'python' }
   Plug 'ap/vim-css-color'
 
-  Plug 'OmniCppComplete'
+  "Plug 'OmniCppComplete'
+
+  "Plug 'Conque-GDB'
 
   Plug 'othree/javascript-libraries-syntax.vim'
-  Plug 'marijnh/tern_for_vim', { 'for': 'javascript', 'do': function('BuildTern') }
+  "Plug 'marijnh/tern_for_vim', { 'for': 'javascript', 'do': function('BuildTern') }
 
   Plug 'scrooloose/nerdcommenter'
   Plug 'ntpeters/vim-better-whitespace'
 
   Plug 'airblade/vim-gitgutter'
+  let g:gitgutter_sign_column_always = 1
+  let g:gitgutter_max_signs=1000
 
   Plug 'tmhedberg/matchit'
   "Plug 'Townk/vim-autoclose'
   "Plug 'sickill/vim-pasta'
-  Plug 'ctrlpvim/ctrlp.vim'
+  "Plug 'ctrlpvim/ctrlp.vim'
+  Plug 'junegunn/fzf', { 'dir': '~/third-party/fzf', 'do': './install --all' }
+  Plug 'junegunn/fzf.vim'
+  noremap <C-P> :GFiles --others --cached --exclude-standard<CR>
 
   Plug 'vasconcelloslf/vim-interestingwords'
 
   " Colorschemes
   Plug 'flazz/vim-colorschemes'
-  Plug 'AlessandroYorba/Sierra'
+  "Plug 'AlessandroYorba/Sierra'
   Plug 'joshdick/onedark.vim'
-  Plug 'mhinz/vim-janah'
+  "Plug 'mhinz/vim-janah'
+  "Plug 'chriskempson/base16-vim'
+
+  " Javascript Plugins
+  Plug 'pangloss/vim-javascript'
+  "Plug 'othree/yajs.vim'
+  Plug 'briancollins/vim-jst'
 
   " Syntax Highlighting Plugs
-  "Plug 'pangloss/vim-javascript'
-  Plug 'othree/yajs.vim'
-  Plug 'groenewege/vim-less'
-  Plug 'octol/vim-cpp-enhanced-highlight'
+  "Plug 'groenewege/vim-less'
+  "Plug 'octol/vim-cpp-enhanced-highlight'
   "Plug 'Glench/Vim-Jinja2-Syntax'
-  Plug 'puppetlabs/puppet-syntax-vim'
-  Plug 'derekwyatt/vim-scala'
-  Plug 'briancollins/vim-jst'
-  Plug 'Flex-4'
+  "Plug 'puppetlabs/puppet-syntax-vim'
+  "Plug 'derekwyatt/vim-scala'
+  "Plug 'Flex-4'
+  Plug 'leafgarland/typescript-vim'
 
   " Perl related plugins
   "Plug 'vim-perl/vim-perl'
@@ -126,6 +163,9 @@ autocmd BufRead *.as set filetype=actionscript
 autocmd BufRead *.mxml set filetype=mxml
 
 if has('persistent_undo')
+  if !isdirectory($HOME."/.vim/undodir")
+    call mkdir($HOME."/.vim/undodir", "")
+  endif
   set undodir=~/.vim/undodir
   set undofile
 endif
@@ -211,13 +251,11 @@ command! Bd bp | sp | bn | bd
 " Indicates a fast terminal connection.
 set ttyfast
 
-set scrolloff=5
+set scrolloff=4
 
-set wildignore+=*/tmp/*,*.so,*.swp,*.pyc,*.o,*.a,*.png,*.jpg,*.gif
+set wildignore+=*/tmp/*,*.so,*.swp,*.pyc,*.o,*.a,*.png,*.jpg,*.gif,*.d,*/TPM/*/public/*,*/node_modules/*,*/vendor/*,*/cots/*
 
 set wildignorecase
-
-"autocmd BufEnter *.cc,*.hh,*.c,*.cpp,*.h nested TagbarOpen
 
 if has('win32') || has('win64')
   let g:netrw_cygwin = 0
@@ -263,7 +301,7 @@ map H ^
 map L $
 
 " Use \s to find and replace
-nnoremap <Leader>s :%s/\<<C-r><C-w>\>/
+nnoremap <Leader>s :,$s/\<<C-r><C-w>\>/
 
 " Look for a tags file in the the current directory or in one of the parent
 " directories
@@ -292,9 +330,9 @@ map <F5> :NERDTreeToggle<CR>
 " Open tagbar subwindow with F6 key
 map <F6> :TagbarToggle<cr>
 
-"Switch buffers with Ctrl-LeftArrow and Ctrl-RightArrow
-noremap <C-Left> <Esc>:bp<CR>
-noremap <C-Right> <Esc>:bn<CR>
+"Switch buffers with Shift-LeftArrow and Shift-RightArrow
+noremap <S-Left> <Esc>:bp<CR>
+noremap <S-Right> <Esc>:bn<CR>
 
 " Switch tabs with Ctrl-LeftArrow and Ctrl-RightArrow
 "noremap <C-Left> <Esc>:tabprev<CR>
@@ -342,9 +380,6 @@ let NERDTreeRespectWildIgnore=1
 " Ctrl-P
 let g:ctrlp_cmd = 'CtrlPMixed'
 
-" GitGutter
-let g:gitgutter_sign_column_always = 1
-
 " Ack.vim
 " Use ag instead of ack, if available
 if executable('ag')
@@ -362,23 +397,6 @@ if has('gui_running')
   let g:airline_powerline_fonts=1
 endif
 set ttimeoutlen=50
-
-" Syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_javascript_checkers = ["jshint"]
-let g:syntastic_python_checkers = ["pyflakes", "python"]
-let g:syntastic_python_python_exec = '/usr/bin/python3.4'
-let g:syntastic_python_flake8_args='--ignore=E501'
-let g:syntastic_check_on_open = 1
-let g:syntastic_html_tidy_exec = '/usr/bin/tidy'
-" Ignore angularjs attributes in html
-let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-", "trimming empty"]
-let g:syntastic_c_checkers=["gcc"]
 
 function! s:NerdTreeGo(package)
   let path = system("goFind " . a:package)
