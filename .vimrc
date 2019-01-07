@@ -1,5 +1,3 @@
-let perl_extended_vars=1
-let perl_include_pod=1
 syntax on
 
 filetype plugin indent on
@@ -15,11 +13,20 @@ function! BuildTern(info)
 endfunction
 
 if v:version >= 700
+  " Automatically install vim-plug
+  if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+  endif
+
   " configure vim-plug
   call plug#begin('~/.vim/plugged')
 
   if v:version >= 701
     Plug 'majutsushi/tagbar'
+    " Open tagbar subwindow with F6 key
+    map <F6> :TagbarToggle<cr>
   endif
 
   if v:version >= 702
@@ -40,7 +47,7 @@ if v:version >= 700
 
   Plug 'Valloric/YouCompleteMe'
   nnoremap <leader>gl :YcmCompleter GoToDefinition<CR>
-  let g:ycm_server_python_interpreter = '/bin/python3'
+  let g:ycm_server_python_interpreter = '/bin/python2'
   let g:ycm_confirm_extra_conf = 0
   let g:ycm_autoclose_preview_window_after_completion = 1
 
@@ -51,26 +58,29 @@ if v:version >= 700
   Plug 'danro/rename.vim'
   "Plug 'closetag.vim'
 
-  Plug 'w0rp/ale'
-  let g:ale_sign_column_always = 1
-
-  "Plug 'scrooloose/syntastic'
-  "set statusline+=%#warningmsg#
-  "set statusline+=%{SyntasticStatuslineFlag()}
-  "set statusline+=%*
-  "let g:syntastic_always_populate_loc_list = 1
-  "let g:syntastic_check_on_open = 1
-  "let g:syntastic_check_on_wq = 0
-  "let g:syntastic_javascript_checkers = ["eslint"]
-  "let g:syntastic_javascript_eslint_exec = 'eslint_d'
-  "let g:syntastic_python_checkers = ["flake8", "python"]
-  "let g:syntastic_python_python_exec = '/usr/bin/python3.4'
-  "let g:syntastic_python_flake8_args='--ignore=E501'
-  "let g:syntastic_check_on_open = 1
-  "let g:syntastic_html_tidy_exec = '/usr/bin/tidy'
-  "" Ignore angularjs attributes in html
-  "let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-", "trimming empty"]
-  "let g:syntastic_c_checkers=["gcc"]
+  if has("job")
+    Plug 'w0rp/ale'
+    let g:ale_sign_column_always = 1
+    highlight ALEError ctermbg=none cterm=underline
+  else
+    Plug 'scrooloose/syntastic'
+    set statusline+=%#warningmsg#
+    set statusline+=%{SyntasticStatuslineFlag()}
+    set statusline+=%*
+    let g:syntastic_always_populate_loc_list = 1
+    let g:syntastic_check_on_open = 1
+    let g:syntastic_check_on_wq = 0
+    let g:syntastic_javascript_checkers = ["eslint"]
+    let g:syntastic_javascript_eslint_exec = 'eslint_d'
+    let g:syntastic_python_checkers = ["flake8", "python"]
+    let g:syntastic_python_python_exec = '/usr/bin/python3.4'
+    let g:syntastic_python_flake8_args='--ignore=E501'
+    let g:syntastic_check_on_open = 1
+    let g:syntastic_html_tidy_exec = '/usr/bin/tidy'
+    " Ignore angularjs attributes in html
+    let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-", "trimming empty"]
+    let g:syntastic_c_checkers=["gcc"]
+  endif
 
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-repeat'
@@ -81,6 +91,7 @@ if v:version >= 700
 
   "Plug 'davidhalter/jedi-vim', { 'for': 'python' }
   Plug 'ap/vim-css-color'
+  Plug 'cakebaker/scss-syntax.vim'
 
   "Plug 'OmniCppComplete'
 
@@ -89,11 +100,11 @@ if v:version >= 700
   Plug 'othree/javascript-libraries-syntax.vim'
   "Plug 'marijnh/tern_for_vim', { 'for': 'javascript', 'do': function('BuildTern') }
 
-  Plug 'scrooloose/nerdcommenter'
+  Plug 'tpope/vim-commentary'
   Plug 'ntpeters/vim-better-whitespace'
 
   Plug 'airblade/vim-gitgutter'
-  let g:gitgutter_sign_column_always = 1
+  set signcolumn=yes
   let g:gitgutter_max_signs=1000
 
   Plug 'tmhedberg/matchit'
@@ -103,8 +114,6 @@ if v:version >= 700
   Plug 'junegunn/fzf', { 'dir': '~/third-party/fzf', 'do': './install --all' }
   Plug 'junegunn/fzf.vim'
   noremap <C-P> :GFiles --others --cached --exclude-standard<CR>
-
-  Plug 'vasconcelloslf/vim-interestingwords'
 
   " Colorschemes
   Plug 'flazz/vim-colorschemes'
@@ -116,21 +125,14 @@ if v:version >= 700
   " Javascript Plugins
   Plug 'pangloss/vim-javascript'
   "Plug 'othree/yajs.vim'
-  Plug 'briancollins/vim-jst'
+  Plug 'nikvdp/ejs-syntax'
 
   " Syntax Highlighting Plugs
   "Plug 'groenewege/vim-less'
   "Plug 'octol/vim-cpp-enhanced-highlight'
   "Plug 'Glench/Vim-Jinja2-Syntax'
-  "Plug 'puppetlabs/puppet-syntax-vim'
-  "Plug 'derekwyatt/vim-scala'
-  "Plug 'Flex-4'
+  Plug 'curist/vim-angular-template'
   Plug 'leafgarland/typescript-vim'
-
-  " Perl related plugins
-  "Plug 'vim-perl/vim-perl'
-  "Plug 'perl-support.vim'
-  "Plug 'perlhelp.vim'
 
   "Plug 'SirVer/ultisnips'
 
@@ -158,9 +160,9 @@ else
   color elflord
 endif
 
-" Turn on syntax highlighting for actionscript and mxml
-autocmd BufRead *.as set filetype=actionscript
-autocmd BufRead *.mxml set filetype=mxml
+" Turn on syntax highlighting for elastic beanstalk json and yaml files config
+" files
+autocmd BufRead,BufNewFile */.ebextensions/*.config set syntax=yaml
 
 if has('persistent_undo')
   if !isdirectory($HOME."/.vim/undodir")
@@ -327,8 +329,6 @@ let python_highlight_all = 1
 "map <F3> :set smarttab expandtab tabstop=2 shiftwidth=2<CR>
 map <F4> :set list!<CR>
 map <F5> :NERDTreeToggle<CR>
-" Open tagbar subwindow with F6 key
-map <F6> :TagbarToggle<cr>
 
 "Switch buffers with Shift-LeftArrow and Shift-RightArrow
 noremap <S-Left> <Esc>:bp<CR>
